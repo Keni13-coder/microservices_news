@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block main %}
+<main>
+    <div class="container">
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" style="width: 100%; z-index: 200; position: fixed; top: 0; left: 0" role="alert">
+            <strong> {{ error }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        <div class="row mainmargin">
+            <div class="col-md-8">
+                <div class="contact-page">
+                    <h2 class="underscore mb-5">Login</h2>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <form id="loginForm" method="post">
+                        <!-- Email address input -->
+                        <div class="mb-3">
+                            <input class="form-control" id="emailAddress" name="email" type="email"
+                                   placeholder="Email Address *"
+                                   data-sb-validations="required, email"/>
+                            <div class="invalid-feedback" data-sb-feedback="emailAddress:required">Email Address is
+                                required.
+                            </div>
+                            <div class="invalid-feedback" data-sb-feedback="emailAddress:email">Email Address Email is
+                                not valid.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" id="password" name="password" type="password"
+                                   placeholder="Password *"
+                                   data-sb-validations="required"/>
+                            <div class="invalid-feedback" data-sb-feedback="password:required">Password is required.
+                            </div>
+                        </div>
+                        <!-- Form submissions success message -->
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">Form submission successful!</div>
+                        </div>
+                        <!-- Form submissions error message -->
+                        <div class="d-none" id="submitErrorMessage">
+                            <div class="text-center text-danger mb-3">Error sending message!</div>
+                        </div>
+                        <div style="margin: 15px 0; text-align: end;">
+                            <a id="resetPWD" class="main-button" style="border: none; padding: 0" href="/reset_password/">Forgot password?</a>
+                        </div>
+                        <!-- Form submit button -->
+                        <div class="d-grid">
+                            <button class="main-button mt-0" id="submitButton" type="submit">Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="sidebar col-md-4">
+                <div class="input-group">
+                    <div class="form-outline">
+                        <input id="search-input" type="search" class="form-control" placeholder="search"/>
+                    </div>
+                    <button id="search-button" type="button" class="btn dark">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="recent-posts pt-5">
+                    <h4 class="mb-3">RECENT POSTS</h4>
+                    {% for post in recent %}
+                    <div class="post-item">
+                        <a href="/blog/single/{{ post.uid }}" class="post-title">
+                            {{post.title}}
+                        </a>
+                        <div class="post-meta">
+                            <span>
+                                <i class="far fa-user"></i>
+                                {{post.owner.username}}
+                            </span>
+                            <span>
+                                <i class="far fa-calendar"></i> 
+                                {{post.create_date}}
+                            </span>
+                                <span>
+                                    <i class="far fa-comment-alt"></i>
+                                    {{post.comment|length}} comments
+                                </span>
+                                
+                        </div>
+                        <p class="post-content">{{post.content}}</p>
+                    </div>
+                    {% endfor %}
+                    <a href="/blog" class="main-button">View all posts</a>
+                    <div class="popular pt-5">
+                        <h4 class="mb-3">READ MOST POPULAR ARTICLES</h4>
+                        {% for post in popular if post.is_active %}
+                        <div class="card bg-dark text-white">
+                            <img src="{{ url_for('media', path=post.image) }}"
+                                 class="card-img" alt="...">
+                            <div class="card-img-overlay p-3">
+                                <div class="text-overlay">
+                                    <h5 class="card-title text-uppercase">{{post.title}}</h5>
+                                    <div class="line"></div>
+                                    <div class="card-text article-meta">
+                                        <span><i class="far fa-user"></i> {{ post.owner.username }}</span><span><i
+                                            class="far fa-calendar"></i> {{post.create_date}}</span><span><i
+                                            class="far fa-comment-alt"></i> {{post.comment|length}}</span>
+                                    </div>
+                                    <a href="/blog/single/{{ post.uid }}" class="card-button">Read article</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
