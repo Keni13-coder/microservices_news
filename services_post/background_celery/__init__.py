@@ -1,0 +1,1 @@
+from .post_tasks import  load_photo, update_photo
